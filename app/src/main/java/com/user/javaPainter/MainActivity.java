@@ -3,6 +3,7 @@ package com.user.javaPainter;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
@@ -14,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         theView = findViewById(R.id.theView);
+
+
     }
 
     public void clear(View view) {
@@ -27,40 +30,40 @@ public class MainActivity extends AppCompatActivity {
     public void ColorClick(View view) {
         switch (view.getId()){
             case R.id.btblack:
-                theView.setColor("");
+                theView.setColor("black");
                 break;
             case R.id.btblue:
-                theView.setColor("");
+                theView.setColor("blue");
                 break;
             case R.id.btbrown:
-                theView.setColor("");
+                theView.setColor("brown");
                 break;
             case R.id.btgray:
-                theView.setColor("");
+                theView.setColor("gray");
                 break;
             case R.id.btgreap:
-                theView.setColor("");
+                theView.setColor("greap");
                 break;
             case R.id.btgreen:
-                theView.setColor("");
+                theView.setColor("green");
                 break;
             case R.id.btlightblue:
-                theView.setColor("");
+                theView.setColor("lightblue");
                 break;
             case R.id.btorange:
-                theView.setColor("");
+                theView.setColor("orange");
                 break;
             case R.id.btpink:
-                theView.setColor("");
+                theView.setColor("pink");
                 break;
             case R.id.btred:
-                theView.setColor("");
+                theView.setColor("red");
                 break;
             case R.id.btwhite:
-                theView.setColor("");
+                theView.setColor("white");
                 break;
             case R.id.btyellow:
-                theView.setColor("");
+                theView.setColor("yellow");
                 break;
         }
     }

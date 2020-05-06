@@ -1,36 +1,50 @@
 package com.user.javaPainter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Environment;
+import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Locale;
 
 /**
  * TODO: document your custom view class.
  */
 public class MyView extends View {
-
     private LinkedList<LinkedList<HashMap<String,Float>>> lines;
     private Paint paint;
     private ArrayList<LinkedList<LinkedList<HashMap<String,Float>>>> liness;
     private ArrayList<String> paintColor;
     int chosecolor = 0;
+    MyOtherClass myclass;
+    FileOutputStream os;
     //context為activity, AttributeSet attrs為更改latout畫面需要
     public MyView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         setBackgroundColor(Color.WHITE);
-
+        myclass = new MyOtherClass(context);
         lines = new LinkedList<>();
         paint = new Paint();
         liness = new ArrayList<>();
@@ -142,8 +156,8 @@ public class MyView extends View {
 
     public void drawLiness(Canvas canvas){
         if(liness.size()>0){
-            Log.e("arraylist", "liness.size(): "+ liness.size());
-            Log.e("paints", "paint: "+ paintColor.size());
+            //Log.e("arraylist", "liness.size(): "+ liness.size());
+           // Log.e("paints", "paint: "+ paintColor.size());
         //有更換過顏色，則
             for (int x=0; x<liness.size();x++){
                 lines = liness.get(x);
@@ -231,5 +245,73 @@ public class MyView extends View {
                 savelines();
                 break;
         }
+    }
+    public void savepicture(View v){
+
+        Bitmap bm = Bitmap.createBitmap(v.getWidth(), v.getHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bm);
+        v.draw(canvas);
+// 獲取螢幕
+        View dView = ((Activity) getContext()).getWindow().getDecorView();
+        dView.setDrawingCacheEnabled(true);
+        dView.buildDrawingCache();
+        Bitmap bmp = dView.getDrawingCache();
+        if (bmp != null)
+        {
+            try {
+                File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                //檔案資料夾名稱
+                File vrDir = new File(path, "Screenshots");
+                if (!vrDir.exists()) {
+                    vrDir.mkdirs();
+                }
+
+                int r = 0;
+                r = (int)(Math.random()*100000)+1;
+
+// 圖片檔案路徑
+                File file = new File(vrDir, "a.png");
+                try {
+                    if(file.exists()){
+                        Log.e("aaa", "file存在");
+                        file.delete();
+                    }
+                    file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    os = new FileOutputStream(file);
+                }catch (Exception e){
+
+                    Log.e("aaa", e.toString());
+                }
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, os);
+                os.flush();
+                os.close();
+                Log.e("aaa", "存檔完畢");
+                myclass.showToast("存檔完畢");
+
+            } catch (Exception e) {
+            }
+        }else{
+            Log.e("aaa", "null");
+        }
+
+    }
+    public class MyOtherClass {
+        private Context context;
+        public Toast toast;
+        public MyOtherClass(Context context){
+            this.context = context;
+        }
+
+        private void showToast(String message){
+            toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+        }
+
     }
 }

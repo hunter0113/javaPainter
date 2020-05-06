@@ -151,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="undo"
-                android:text="返回上一步" />
+                android:text="回上一步" />
 
             <Button
                 android:id="@+id/button"
@@ -160,6 +160,22 @@
                 android:layout_weight="1"
                 android:onClick="clear"
                 android:text="清除" />
+
+            <Button
+                android:id="@+id/btsave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="savepicture"
+                android:text="存檔" />
+
+            <Button
+                android:id="@+id/btshare"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="share"
+                android:text="分享" />
 
         </LinearLayout>
     </LinearLayout>

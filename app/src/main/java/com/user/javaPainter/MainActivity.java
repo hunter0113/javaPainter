@@ -19,7 +19,6 @@ import java.io.File;
 public class MainActivity extends AppCompatActivity {
     MyView theView;
     private final String PERMISSION_WRITE_STORAGE = "android.permission.WRITE_EXTERNAL_STORAGE";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }else{
             Log.e("aaa", "savepicture");
-            theView.savepicture(view);
+            theView.savepicture(theView);
         }
     }
     private boolean needCheckPermission() {
@@ -127,17 +126,15 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+
     public void share(View v){
-        // get file directory.
-        final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);;
-        File vrDir = new File(path, "Screenshots");
-        File file = new File(vrDir, "a.png");
+        savepicture(v);
+        File file = theView.share();
         // invoke an intent with ACTION_SEND
         final Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("image/*");
         shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
         startActivity(Intent.createChooser(shareIntent, "分享到"));
-
     }
 
 }

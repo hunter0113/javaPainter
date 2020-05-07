@@ -2,10 +2,12 @@ package com.user.javaPainter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Environment;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
@@ -28,6 +30,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Locale;
+import java.util.Random;
 
 /**
  * TODO: document your custom view class.
@@ -38,8 +41,11 @@ public class MyView extends View {
     private ArrayList<LinkedList<LinkedList<HashMap<String,Float>>>> liness;
     private ArrayList<String> paintColor;
     int chosecolor = 0;
+
+
     MyOtherClass myclass;
     FileOutputStream os;
+    File savefilename;
     //context為activity, AttributeSet attrs為更改latout畫面需要
     public MyView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -52,6 +58,7 @@ public class MyView extends View {
 /*
         paint.setColor(Color.parseColor("#0000CC"));*/
         paint.setStrokeWidth(10);
+
     }
 
     //onDraw為自動呼叫
@@ -246,17 +253,23 @@ public class MyView extends View {
                 break;
         }
     }
-    public void savepicture(View v){
 
-        Bitmap bm = Bitmap.createBitmap(v.getWidth(), v.getHeight(),
+    public Bitmap convertViewToBitmap(View view){
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),
                 Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bm);
-        v.draw(canvas);
-// 獲取螢幕
-        View dView = ((Activity) getContext()).getWindow().getDecorView();
-        dView.setDrawingCacheEnabled(true);
-        dView.buildDrawingCache();
-        Bitmap bmp = dView.getDrawingCache();
+        //利用bitmap生成画布
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawRect(0, 0, bitmap.getWidth(), bitmap.getHeight(), paint);
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+        //把view中的内容绘制在画布上
+        view.draw(canvas);
+        return bitmap;
+    }
+
+    public void savepicture(View v){
+        Bitmap bmp = convertViewToBitmap(v);
         if (bmp != null)
         {
             try {
@@ -267,14 +280,12 @@ public class MyView extends View {
                     vrDir.mkdirs();
                 }
 
-                int r = 0;
-                r = (int)(Math.random()*100000)+1;
-
 // 圖片檔案路徑
-                File file = new File(vrDir, "a.png");
+                File file = new File(vrDir, getTimeName()+".png");
+                savefilename = file;
                 try {
                     if(file.exists()){
-                        Log.e("aaa", "file存在");
+                        Log.e("aaa", getTimeName()+".pngfile存在");
                         file.delete();
                     }
                     file.createNewFile();
@@ -284,7 +295,6 @@ public class MyView extends View {
                 try {
                     os = new FileOutputStream(file);
                 }catch (Exception e){
-
                     Log.e("aaa", e.toString());
                 }
                 bmp.compress(Bitmap.CompressFormat.PNG, 100, os);
@@ -314,4 +324,16 @@ public class MyView extends View {
         }
 
     }
+    // 自動檔名依日期
+    public static String getTimeName() {
+        Date _date = new Date(System.currentTimeMillis());
+        SimpleDateFormat _sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
+        Random _random = new Random();
+        return _sdf.format(_date) + _random.nextInt(999);
+    }
+    public File share(){
+        // get file directory.
+        return savefilename;
+    }
+
 }

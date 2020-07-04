@@ -5,4 +5,4 @@
 ．繪製完後，圖案可以儲存在本地端。 <br/>
 ．能將圖案分享至各社交軟體、論壇、雲端等地。 <br/>
 
-<img src="https://github.com/hunter0113/javaPainter/blob/master/328329.jpg" width="25%" height="25%">  <img src="https://github.com/hunter0113/javaPainter/blob/master/painter2.jpg" width="25%" height="25%">
+<img src="https://github.com/hunter0113/javaPainter/blob/master/圖片2.jpg" width="25%" height="25%"> 
